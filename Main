@@ -1,0 +1,87 @@
+import java.util.List;
+import javax.swing.*;
+
+//La Clase principal que contiene el menu y el juego.
+class Main {
+
+	public static void main(String[] args) {
+		//Opciones del menu principal, a penas abrir el programa.
+		JOptionPane.showMessageDialog(null, "¿En que consiste este juego? \nConsiste en un enfrentamiento entre dos equipos: supervivientes (4 jugadores) y zombies (4 jugadores), un total de 8 jugadores. Los jugadores de ambos equipos deben acumular puntos y que un \nequipo debe llegar a un puntaje superior al del otro para ganar la partida. \nLa partida esta dividida en cualquier cantidad de capítulos máximo de 5, durante está, los jugadores supervivientes deberán llegar a un lugar seguro para finalizar \nel capitulo y sobrevivir a los jugadores zombies, y estos últimos deberán hacer daño a los supervivientes para acumular puntos de cada jugador del equipo zombie. \nEn cada capitulo hay dos enfrentamientos, es decir, si los jugadores supervivientes empiezan primero el capitulo, cuando finalice, los jugadores del equipo de \nsupervivientes pasaran a ser del equipo de zombies y los jugadores el equipo de zombies que estaban anteriormente pasaran a ser del equipo de supervivientes y así \nsucesivamente hasta que termine la partida."
+				);		
+		String[] Opciones = {
+				"Jugar partida","Salir"
+				};
+		int opcion =0; //Variable para guardar la opción seleccionada del menu principal.
+		do {
+			//Mostrar un menu con una imagen y opciones.
+			//Este menu sirve para elegir si jugar una partida o salir del menu.
+			opcion=JOptionPane.showOptionDialog(null, "¿Usted quiere jugar una partida de enfrentamiento?", "Left 4 Dead 2", 
+					JOptionPane.DEFAULT_OPTION, opcion, new ImageIcon(Main.class.getResource("/img/versus.jpg")), Opciones, Opciones[0]);
+			switch (opcion) {
+			case 0://Jugar partida
+						int opcion1 =0; //Variable para guardar la opción.
+						//Opciones de la partida de enfrentamiento.
+						String[] Opciones1 = {
+								"Zombies","Supervivientes","Ver equipos","Empezar la campaña","Salir"
+						};
+						//Llamar al gestor de equipos para controlar la lista de jugadores.
+				    	GestorEquipos gestorJugador = new GestorEquipos();
+						do {
+							//Mostrar las instrucciones.
+							opcion1= JOptionPane.showOptionDialog(null, "Primero deberá ingresar el nombre de usuario de los 4 jugadores supervivientes y de los 4 jugadores \njugadores zombies, para después empezar la campaña/partida.", 
+									"Left 4 Dead 2", opcion1, opcion1, null, Opciones1, Opciones1[0]);
+							switch (opcion1) {
+							case 0: //Zombies
+								//Solicitar el nombre del jugador zombie.
+						        String nombreZombie = JOptionPane.showInputDialog("Ingrese el nombre del Jugador Zombie:");
+						        if (gestorJugador.nombreJugadorRepetido(nombreZombie)) {
+									JOptionPane.showMessageDialog(null, "Error: ya existe un jugador en la lista de supervivientes con un nombre igual al ingresado, ingrese otro.");
+									break;
+								} 
+						        Jugadores jugadorZombie = new Jugadores(nombreZombie, 100);
+						        gestorJugador.agregarJugador(jugadorZombie);
+						    break;
+							case 1://Supervivientes
+								//Solicitar el nombre del jugador superviviente.
+						        String nombreSuperviviente = JOptionPane.showInputDialog("Ingrese el nombre del Jugador Superviviente:");
+						        if (gestorJugador.nombreJugadorRepetido(nombreSuperviviente)) {
+									JOptionPane.showMessageDialog(null, "Error: ya existe un jugador en la lista de zombies con un nombre igual al ingresado, ingrese otro.");
+									break;
+								}
+						        Jugadores jugadorSuperviviente = new Jugadores(nombreSuperviviente, 100);
+						        gestorJugador.agregarJugador(jugadorSuperviviente);
+						    break;
+							case 2://Ver equipos
+								gestorJugador.mostrarJugadores(); //Mostrar a los jugadores ingresados.
+
+							break;
+							case 3://Empezar la campaña
+								//Verificar si hay 8 jugadores para iniciar el enfrentamiento.
+								if (gestorJugador.getListaJugadores().size() > 8) {
+								    JOptionPane.showMessageDialog(null, "Error: hay más de 8 jugadores cargados.");
+								    break;
+								}else if (gestorJugador.getListaJugadores().size() < 8) {
+								    JOptionPane.showMessageDialog(null, "Error: hay menos de 8 jugadores cargados.");
+								    break;
+								}else {
+		                        //Crear la campaña con los jugadores que esten en la lista.
+								Equipo campaña = new Equipo(gestorJugador);
+								//Ingresar el número de capitulos de la campaña.
+						        String Capitulos = JOptionPane.showInputDialog("Ingrese el número de capítulos de la campaña (máximo 5):");
+						        int numeroCapitulos = Integer.parseInt(Capitulos);
+						        //!!!QUE EMPIECE EL ENFRENTAMIENTO¡¡¡
+						        campaña.empezar(numeroCapitulos);
+							}
+						    break;
+							case 4://Salir de la partida
+								JOptionPane.showMessageDialog(null, "Saliendo de la partida.");
+								break;
+							} 
+						}while (opcion1!=4); //Hacer un bucle hasta que se elija salir del menu.
+				case 1://Salir del menu principal
+					JOptionPane.showMessageDialog(null, "Saliendo del menu principal.");
+				break;
+				}
+		} while (opcion!=1); //Hacer un bucle hasta que se elija salir del menu principal.
+	}
+		    }
