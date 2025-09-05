@@ -1,0 +1,45 @@
+package tp_final_poo;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+//Clase para controlar la lista de jugadores.
+public class GestorEquipos {
+	private List<Jugadores> listaJugadores; //Una lista para almacenar todos los jugadores ingresados.
+	
+	//Constructor para iniciar la lista vacía.
+    public GestorEquipos() {
+        listaJugadores = new ArrayList<>();
+    }
+    //Metodo para agregar jugadores a la lista.
+    public void agregarJugador(Jugadores jugador) {
+        listaJugadores.add(jugador);
+    }
+    //Devolver la lista actual de jugadores.
+    public List<Jugadores> getListaJugadores() {
+        return listaJugadores;
+    }
+    public boolean nombreJugadorRepetido(String nombre) { //Metodo booleano para devolver verdadero o falso 
+    	for (Jugadores jugadores : listaJugadores) {
+			if (jugadores.getNombre().equalsIgnoreCase(nombre)) { //Condicion si hay nombres iguales
+				return true; //Devolver un valor verdadero
+			} 
+		}
+    	return false; //Devolver un valor falso
+    }
+    //Mostrar todos los jugadores de la lista con sus salud y puntos.
+    public void mostrarJugadores() {
+    	if (listaJugadores.isEmpty()) {
+    		//En caso de que no haya jugadores en la lista.
+            JOptionPane.showMessageDialog(null, "Error: no hay jugadores en la lista.");
+            return;
+        }
+    	//Mostrar los datos de cada jugador.
+    	 String mensaje = "Lista de jugadores:\n";
+         for (Jugadores jugador : listaJugadores) {
+             mensaje += jugador.getNombre() + "\nSalud: " + jugador.getSalud() + "\nPuntos: " + jugador.getPuntos() + "\n";
+         }
+         //Mostrar la información de todos los jugadores.
+         JOptionPane.showMessageDialog(null, mensaje);
+     }
+}
