@@ -1,0 +1,57 @@
+package tp_final_poo;
+import javax.swing.JOptionPane;
+import java.util.Random;
+import java.util.ArrayList;
+
+import java.util.List;
+public class Capitulos { //La clase representa un capitulo de la campaña donde ocurren los enfrentamientos.
+	private int numeroCapitulo; //Número del capitulo actual.
+    private List<Jugadores[]>enfrentamiento; //Lista de enfrentamientos con pares de jugadores: supervivientes y zombies.
+    private Random random; //Generador de números aleatorios.
+
+    //Constructor para recibir el número del capitulo y la lista de enfrentamientos.
+    public Capitulos(int numeroCapitulo, List<Jugadores[]>enfrentamiento) {
+        this.numeroCapitulo = numeroCapitulo;
+        this.enfrentamiento=enfrentamiento;
+        this.random = new Random();
+    }
+    //Metodo para ejecutar la ronda normal donde el zombie ataca al superviviente.
+	public void jugarRonda() {
+    	for (Jugadores[] jugador : enfrentamiento) {
+            Jugadores jugadorSuperviviente = jugador[0]; //Jugador superviviente.
+            Jugadores jugadorZombie = jugador[1]; //Jugadore zombie.
+
+            int daño = (int)(Math.random()*100); //Generar aleatoriamente un daño entre 0 y 99.
+            jugadorSuperviviente.recibirdaño(daño); //Daño al superviviente.
+            jugadorZombie.sumarPuntos(daño); //Sumar puntos al jugador zombie del daño hecho al superviviente.
+    	//Mostrar los resultados del primer enfrentamiento entre jugadores zombies y jugadores supervivientes.
+        JOptionPane.showMessageDialog(null, "Capítulo " + numeroCapitulo + ": Enfrentamiento entre " + jugadorSuperviviente.getNombre() + " (Superviviente) y " + jugadorZombie.getNombre() + " (Zombie)");
+        JOptionPane.showMessageDialog(null, jugadorSuperviviente.getNombre() + " ha recibido " + daño + " de daño.");
+        JOptionPane.showMessageDialog(null, jugadorZombie.getNombre() + " ha ganado " + daño + " puntos por el daño.");
+    }
+    	}
+	//Metodo para ejecutar el segundo enfrentamiento (invertir los roles de los jugadores) donde el superviviente ataca al zombie (modificando la lista de jugadores).
+    	public void jugarRondaInversa() {
+    	for (Jugadores[] jugador : enfrentamiento) {
+            //Invertir los roles de los jugadores, modificando el orden.
+            Jugadores invertirrol = jugador[0]; 
+            jugador[0] = jugador[1]; //Jugadore zombie.
+            jugador[1] = invertirrol; //Jugador superviviente.
+
+            int daño = (int)(Math.random()*100); //Generar aleatoriamente un daño entre 0 y 99.
+            jugador[0].recibirdaño(daño); //El jugador superviviente recibe daño. 
+            jugador[1].sumarPuntos(daño); //El jugador zombie se le suma puntos.
+            //Mostrar el resultado del segundo enfrentamiento (invertir los roles de los jugadores).
+            JOptionPane.showMessageDialog(null, "Ronda Inversa - " + jugador[0].getNombre() + " ha recibido " + daño + " de daño.\n" +
+            		jugador[1].getNombre() + " gana " + daño + " puntos.");
+    	}
+    	}
+    	//Mostrar los resultados del enfrentamiento en general del capitulo.
+    public void mostrarResultados() {
+    	String resultado = "Los resultados del capítulo " + numeroCapitulo + " son:\n";
+        for (Jugadores[] jugador : enfrentamiento) {
+            resultado += "Superviviente: " + jugador[0] + "\nZombie: " + jugador[1] + "\n\n";
+        }
+        JOptionPane.showMessageDialog(null, resultado);
+    }
+}
